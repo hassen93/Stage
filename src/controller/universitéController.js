@@ -51,11 +51,31 @@ function finduniversité(req, res, next) {
       res.status(500).json({ status: 500, message: error.message });
     });
 }
+
+function finduniversiteByNom(req, res, next) {
+  université = Université.findOne({
+    nom_université: req.params.nom_universite,
+  })
+    .then((université) => {
+      if (université) {
+        {
+          res.status(201).json({ status: 201, Data: université });
+        }
+      } else {
+        {
+          res.status(404).json({ status: 404, message: "not find" });
+        }
+      }
+    })
+    .catch((error) => {
+      res.status(500).json({ status: 500, message: error.message });
+    });
+}
 async function deleteuniversité(req, res, next) {
   try {
-    if (req.query.universitéId) {
+    if (req.params.universiteId) {
       const université = await Université.findOneAndDelete({
-        _id: req.query.universitéId,
+        _id: req.params.universiteId,
       });
       if (université) {
         return res
@@ -109,6 +129,7 @@ async function updateuniversté(req, res, next) {
 
 const getAlluniversité = async (req, res, next) => {
   Université.find()
+    .populate("stagiaires")
     .then((universités) => {
       res.status(200).json({ status: 200, listUniversités: universités });
     })
@@ -121,3 +142,4 @@ exports.deleteuniversité = deleteuniversité;
 exports.finduniversité = finduniversité;
 exports.updateduniversité = updateuniversté;
 exports.getAlluniversité = getAlluniversité;
+exports.finduniversiteByNom = finduniversiteByNom;

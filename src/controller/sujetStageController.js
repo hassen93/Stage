@@ -56,6 +56,26 @@ function findsujetStage(req, res, next) {
       res.status(500).json({ status: 500, message: error.message });
     });
 }
+
+function findsujetStageByNom(req, res, next) {
+  sujetStage = SujetStage.findOne({
+    nom_sujetStage: req.params.nom_sujetStage,
+  })
+    .then((sujetStage) => {
+      if (sujetStage) {
+        {
+          res.status(201).json({ status: 201, Data: sujetStage });
+        }
+      } else {
+        {
+          res.status(404).json({ status: 404, message: "not find" });
+        }
+      }
+    })
+    .catch((error) => {
+      res.status(500).json({ status: 500, message: error.message });
+    });
+}
 async function updatesujetStage(req, res, next) {
   let nom_sujetStage = req.body.nom_sujetStage;
   const { stagiaires } = req.body;
@@ -93,9 +113,9 @@ async function updatesujetStage(req, res, next) {
 
 async function deletesujetStage(req, res, next) {
   try {
-    if (req.query.sujetStageId) {
+    if (req.params.sujetStageId) {
       const sujetStage = await SujetStage.findOneAndDelete({
-        _id: req.query.sujetStageId,
+        _id: req.params.sujetStageId,
       });
       if (sujetStage) {
         return res
@@ -114,6 +134,9 @@ async function deletesujetStage(req, res, next) {
 
 const getAllsujetStage = async (req, res, next) => {
   SujetStage.find()
+    .populate("stagiaires")
+    .populate("technologies")
+    .populate("encadreurs")
     .then((sujetStages) => {
       res.status(200).json({ status: 200, listSujetStages: sujetStages });
     })
@@ -126,3 +149,4 @@ exports.findsujetStage = findsujetStage;
 exports.updatesujetStage = updatesujetStage;
 exports.deletesujetStage = deletesujetStage;
 exports.getAllsujetStage = getAllsujetStage;
+exports.findsujetStageByNom = findsujetStageByNom;

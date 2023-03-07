@@ -102,8 +102,8 @@ function login(req, res) {
 async function deleteUser(req, res, next) {
   try {
     console.log("4444444");
-    if (req.query.userId) {
-      const user = await User.findOneAndDelete({ _id: req.query.userId });
+    if (req.params.userId) {
+      const user = await User.findOneAndDelete({ _id: req.params.userId });
       if (user) {
         return res
           .status(200)
@@ -155,9 +155,40 @@ const getAlluser = async (req, res, next) => {
       res.status(500).json({ status: 500, message: err.message });
     });
 };
+function logout(req, res) {
+  const authHeader = req.headers["authorization"];
+  jwt.sign(authHeader, "", { expiresIn: 1 }, (logout, err) => {
+    if (logout) {
+      res.send({ msg: "You have been Logged Out" });
+    } else {
+      res.send({ msg: "Error" });
+    }
+  });
+}
+function findUserByEmail(req, res, next) {
+  user = User.findOne({
+    email: req.params.email,
+  })
+    .then((user) => {
+      if (user) {
+        {
+          res.status(201).json({ status: 201, Data: user });
+        }
+      } else {
+        {
+          res.status(404).json({ status: 404, message: "not find" });
+        }
+      }
+    })
+    .catch((error) => {
+      res.status(500).json({ status: 500, message: error.message });
+    });
+}
 exports.signUp = signUp;
 exports.findUser = findUser;
 exports.login = login;
 exports.deleteUser = deleteUser;
 exports.updateuser = updateuser;
 exports.getAlluser = getAlluser;
+exports.logout = logout;
+exports.findUserByEmail = findUserByEmail;

@@ -6,11 +6,14 @@ const hasRole = require("../middleware/hasRole");
 
 router.post(
   "/addstagiaire",
-  auth,
-  hasRole("admin"),
+  // auth,
+  // hasRole("admin"),
   stagiaireController.addStagiaire
 );
-router.get("/deletestagiaire", stagiaireController.deleteStagiaire);
+router.get(
+  "/deletestagiaire/:stagiaireId?",
+  stagiaireController.deleteStagiaire
+);
 router.post(
   "/updatestagiaire/:stagiaireId?",
   stagiaireController.updateStagiaire
@@ -18,8 +21,14 @@ router.post(
 router.get("/findstagiaire/:stagiaireId?", stagiaireController.findStagiaire);
 router.get(
   "/getAllstagiaire",
-  auth,
-  hasRole("admin"),
+  //auth,
+  //hasRole("admin"),
   stagiaireController.getAllstagiaire
+);
+router.get(
+  "/findstagiaireByNom/:nom_stagiaire?",
+  //auth,
+  //hasRole("admin"),
+  stagiaireController.findstagiaireByNom
 );
 module.exports = router;

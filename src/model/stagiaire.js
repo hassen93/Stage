@@ -46,7 +46,7 @@ const stagiaireSchema = mongoose.Schema({
     type: String,
     required: true,
   },
-  université: [
+  universités: [
     {
       type: mongoose.Types.ObjectId,
       ref: "université",

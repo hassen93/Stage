@@ -11,15 +11,15 @@ router.post(
   technologieController.addtechnologie
 );
 router.get(
-  "/findtechnologie/:technologieId?",
-  auth,
-  hasRole("admin"),
-  technologieController.findtechnologie
+  "/findtechnologieById/:technologieId?",
+  //auth,
+  //hasRole("admin"),
+  technologieController.findtechnologieById
 );
 router.get(
-  "/deletetechnologie",
-  auth,
-  hasRole("admin"),
+  "/deletetechnologie/:technologieId?",
+  //auth,
+  //hasRole("admin"),
   technologieController.deletetechnologie
 );
 router.post(
@@ -33,5 +33,11 @@ router.get(
   auth,
   hasRole("admin"),
   technologieController.getAlltechnologie
+);
+router.get(
+  "/findtechnologieByNom/:nom_technologie?",
+  //auth,
+  //hasRole("admin"),
+  technologieController.findtechnologieByNom
 );
 module.exports = router;

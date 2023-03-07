@@ -1,5 +1,10 @@
 const mongoose = require("mongoose");
 const encadreurSchema = mongoose.Schema({
+  userId: {
+    type: mongoose.Types.ObjectId,
+    required: true,
+    ref: "user",
+  },
   nom_encadreur: {
     type: String,
     required: true,
@@ -18,6 +23,7 @@ const encadreurSchema = mongoose.Schema({
   },
   Tel_encadreur: {
     type: Number,
+    required: true,
   },
 
   fonction: {

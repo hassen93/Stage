@@ -6,8 +6,8 @@ const hasRole = require("../middleware/hasRole");
 
 router.post(
   "/adduniversite",
-  auth,
-  hasRole("admin"),
+  //auth,
+  //hasRole("admin"),
   universitéController.adduniversité
 );
 router.post(
@@ -15,22 +15,28 @@ router.post(
   universitéController.updateduniversité
 );
 router.get(
-  "/deleteuniversite",
-  auth,
-  hasRole("admin"),
+  "/deleteuniversite/:universiteId?",
+  // auth,
+  //hasRole("admin"),
   universitéController.deleteuniversité
 );
 
 router.get(
   "/finduniversite/:universiteId?",
-  auth,
-  hasRole("admin"),
+  //auth,
+  //hasRole("admin"),
   universitéController.finduniversité
 );
 router.get(
   "/getAlluniversite",
-  auth,
-  hasRole("admin"),
+  //auth,
+  //hasRole("admin"),
   universitéController.getAlluniversité
+);
+router.get(
+  "/finduniversiteByNom/:nom_universite?",
+  //auth,
+  //hasRole("admin"),
+  universitéController.finduniversiteByNom
 );
 module.exports = router;

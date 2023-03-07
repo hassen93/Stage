@@ -1,4 +1,5 @@
 const { Encadreur } = require("../model/encadreur");
+const { upload, Storage } = require("../../server");
 async function addencadreur(req, res, next) {
   Encadreur.findOne({ email_encadreur: req.body.email_encadreur })
     .then((encadreur) => {
@@ -7,28 +8,37 @@ async function addencadreur(req, res, next) {
           .status(409)
           .json({ status: 409, message: "encadreur already created" });
       } else {
-        const { stagiaires } = req.body;
-        const { sujetStages } = req.body;
-        let encadreurDetails = new Encadreur({
-          nom_encadreur: req.body.nom_encadreur,
-          prenom_encadreur: req.body.prenom_encadreur,
-          email_encadreur: req.body.email_encadreur,
-          Adresse_encadreur: req.body.Adresse_encadreur,
-          Tel_encadreur: req.body.Tel_encadreur,
-          fonction: req.body.fonction,
-          stagiaires: stagiaires,
-          sujetStages: sujetStages,
+        upload(req, res, (err) => {
+          if (err) {
+            console.log(err);
+          } else {
+            const { stagiaires } = req.body;
+            const { sujetStages } = req.body;
+            let encadreurDetails = new Encadreur({
+              userId: req.params._id,
+              nom_encadreur: req.body.nom_encadreur,
+              prenom_encadreur: req.body.prenom_encadreur,
+              email_encadreur: req.body.email_encadreur,
+              Adresse_encadreur: req.body.Adresse_encadreur,
+              Tel_encadreur: req.body.Tel_encadreur,
+              fonction: req.body.fonction,
+              stagiaires: stagiaires,
+              sujetStages: sujetStages,
+            });
+
+            encadreurDetails
+              .save()
+              .then(() => {
+                res.status(201).json({
+                  status: 201,
+                  message: "encadreur created with success",
+                });
+              })
+              .catch((error) => {
+                res.status(400).json({ status: 400, message: error.message });
+              });
+          }
         });
-        encadreurDetails
-          .save()
-          .then(() => {
-            res
-              .status(201)
-              .json({ status: 201, message: "encadreur created with success" });
-          })
-          .catch((error) => {
-            res.status(400).json({ status: 400, message: error.message });
-          });
       }
     })
 
@@ -54,11 +64,31 @@ function findencadreur(req, res, next) {
       res.status(500).json({ status: 500, message: error.message });
     });
 }
+
+function findencadreurByNom(req, res, next) {
+  encadreur = Encadreur.findOne({
+    nom_encadreur: req.params.nom_encadreur,
+  })
+    .then((encadreur) => {
+      if (encadreur) {
+        {
+          res.status(201).json({ status: 201, Data: encadreur });
+        }
+      } else {
+        {
+          res.status(404).json({ status: 404, message: "not find" });
+        }
+      }
+    })
+    .catch((error) => {
+      res.status(500).json({ status: 500, message: error.message });
+    });
+}
 async function deleteencadreur(req, res, next) {
   try {
-    if (req.query.encadreurId) {
+    if (req.params.encadreurId) {
       const encadreur = await Encadreur.findOneAndDelete({
-        _id: req.query.encadreurId,
+        _id: req.params.encadreurId,
       });
       if (encadreur) {
         return res
@@ -116,6 +146,8 @@ async function updateencadreur(req, res, next) {
 
 const getAllencadreur = async (req, res, next) => {
   Encadreur.find()
+    .populate("stagiaires")
+    .populate("sujetStages")
     .then((encadreurs) => {
       res.status(200).json({ status: 200, listEncadreurs: encadreurs });
     })
@@ -128,3 +160,4 @@ exports.deleteencadreur = deleteencadreur;
 exports.findencadreur = findencadreur;
 exports.updateencadreur = updateencadreur;
 exports.getAllencadreur = getAllencadreur;
+exports.findencadreurByNom = findencadreurByNom;

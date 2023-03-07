@@ -62,11 +62,30 @@ function findStagiaire(req, res, next) {
       res.status(500).json({ status: 500, message: error.message });
     });
 }
+function findstagiaireByNom(req, res, next) {
+  stagiaire = Stagiaire.findOne({
+    nom_stagiaire: req.params.nom_stagiaire,
+  })
+    .then((stagiaire) => {
+      if (stagiaire) {
+        {
+          res.status(201).json({ status: 201, Data: stagiaire });
+        }
+      } else {
+        {
+          res.status(404).json({ status: 404, message: "not find" });
+        }
+      }
+    })
+    .catch((error) => {
+      res.status(500).json({ status: 500, message: error.message });
+    });
+}
 async function deleteStagiaire(req, res, next) {
   try {
-    if (req.query.stagiaireId) {
+    if (req.params.stagiaireId) {
       const stagiaire = await Stagiaire.findOneAndDelete({
-        _id: req.query.stagiaireId,
+        _id: req.params.stagiaireId,
       });
       if (stagiaire) {
         return res
@@ -138,6 +157,10 @@ async function updateStagiaire(req, res, next) {
 }
 const getAllstagiaire = async (req, res, next) => {
   Stagiaire.find()
+    .populate("universités")
+    .populate("sujetStages")
+    .populate("encadreurs")
+
     .then((stagiaires) => {
       res.status(200).json({ status: 200, listStagiaires: stagiaires });
     })
@@ -150,3 +173,4 @@ exports.deleteStagiaire = deleteStagiaire;
 exports.findStagiaire = findStagiaire;
 exports.updateStagiaire = updateStagiaire;
 exports.getAllstagiaire = getAllstagiaire;
+exports.findstagiaireByNom = findstagiaireByNom;

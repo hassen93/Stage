@@ -7,7 +7,6 @@ module.exports = async (req, res, next) => {
     const token = req.headers.authorization.split(" ")[1];
 
     const decodToken = jwt.verify(token, process.env.SECRET_KEY);
-    console.log("az");
     const userId = decodToken.userId;
     const userDetails = await User.findById(userId);
 

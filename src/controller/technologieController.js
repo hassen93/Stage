@@ -2,7 +2,7 @@ const { SujetStage } = require("../model/sujetStage");
 const { Technologie } = require("../model/technologie");
 const sujetStageController = require("../controller/sujetStageController");
 async function addtechnologie(req, res, next) {
-  Technologie.findOne({ nom_technologie: req.body.technologie })
+  Technologie.findOne({ nom_technologie: req.body.nom_technologie })
     .then((technologie) => {
       if (technologie) {
         res
@@ -32,7 +32,7 @@ async function addtechnologie(req, res, next) {
       res.status(400).json({ status: 400, message: error.message });
     });
 }
-function findtechnologie(req, res, next) {
+function findtechnologieById(req, res, next) {
   technologie = Technologie.findById(req.params.technologieId)
     .then((technologie) => {
       if (technologie) {
@@ -49,6 +49,27 @@ function findtechnologie(req, res, next) {
       res.status(500).json({ status: 500, message: error.message });
     });
 }
+
+function findtechnologieByNom(req, res, next) {
+  technologie = Technologie.findOne({
+    nom_technologie: req.params.nom_technologie,
+  })
+    .then((technologie) => {
+      if (technologie) {
+        {
+          res.status(201).json({ status: 201, Data: technologie });
+        }
+      } else {
+        {
+          res.status(404).json({ status: 404, message: "not find" });
+        }
+      }
+    })
+    .catch((error) => {
+      res.status(500).json({ status: 500, message: error.message });
+    });
+}
+
 async function updatetechnologie(req, res, next) {
   let nom_technologie = req.body.nom_technologie;
   const { sujetStages } = req.body;
@@ -82,9 +103,9 @@ async function updatetechnologie(req, res, next) {
 
 async function deletetechnologie(req, res, next) {
   try {
-    if (req.query.technologieId) {
+    if (req.params.technologieId) {
       const technologie = await Technologie.findOneAndDelete({
-        _id: req.query.technologieId,
+        _id: req.params.technologieId,
       });
       if (technologie) {
         return res
@@ -104,15 +125,17 @@ async function deletetechnologie(req, res, next) {
 }
 const getAlltechnologie = async (req, res, next) => {
   Technologie.find()
+    .populate("sujetStages")
     .then((technologies) => {
-      res.status(200).json({ status: 200, listTechnologies: technologies });
+      res.status(200).json({ listTechnologies: technologies });
     })
     .catch((err) => {
       res.status(500).json({ status: 500, message: err.message });
     });
 };
 exports.addtechnologie = addtechnologie;
-exports.findtechnologie = findtechnologie;
+exports.findtechnologieById = findtechnologieById;
 exports.updatetechnologie = updatetechnologie;
 exports.deletetechnologie = deletetechnologie;
 exports.getAlltechnologie = getAlltechnologie;
+exports.findtechnologieByNom = findtechnologieByNom;
