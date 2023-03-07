@@ -1,5 +1,4 @@
 const { Encadreur } = require("../model/encadreur");
-const { upload, Storage } = require("../../server");
 async function addencadreur(req, res, next) {
   Encadreur.findOne({ email_encadreur: req.body.email_encadreur })
     .then((encadreur) => {
