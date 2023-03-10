@@ -38,4 +38,10 @@ router.get(
   //hasRole("admin"),
   encadreurController.findencadreurByNom
 );
+router.get(
+  "/findencadreurByUserId/:userId?",
+  //auth,
+  //hasRole("admin"),
+  encadreurController.findencadreurByUserId
+);
 module.exports = router;

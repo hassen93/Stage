@@ -7,37 +7,30 @@ async function addencadreur(req, res, next) {
           .status(409)
           .json({ status: 409, message: "encadreur already created" });
       } else {
-        upload(req, res, (err) => {
-          if (err) {
-            console.log(err);
-          } else {
-            const { stagiaires } = req.body;
-            const { sujetStages } = req.body;
-            let encadreurDetails = new Encadreur({
-              userId: req.params._id,
-              nom_encadreur: req.body.nom_encadreur,
-              prenom_encadreur: req.body.prenom_encadreur,
-              email_encadreur: req.body.email_encadreur,
-              Adresse_encadreur: req.body.Adresse_encadreur,
-              Tel_encadreur: req.body.Tel_encadreur,
-              fonction: req.body.fonction,
-              stagiaires: stagiaires,
-              sujetStages: sujetStages,
-            });
-
-            encadreurDetails
-              .save()
-              .then(() => {
-                res.status(201).json({
-                  status: 201,
-                  message: "encadreur created with success",
-                });
-              })
-              .catch((error) => {
-                res.status(400).json({ status: 400, message: error.message });
-              });
-          }
+        const { stagiaires } = req.body;
+        const { sujetStages } = req.body;
+        let encadreurDetails = new Encadreur({
+          userId: req.params.userId,
+          nom_encadreur: req.body.nom_encadreur,
+          prenom_encadreur: req.body.prenom_encadreur,
+          email_encadreur: req.body.email_encadreur,
+          Adresse_encadreur: req.body.Adresse_encadreur,
+          Tel_encadreur: req.body.Tel_encadreur,
+          fonction: req.body.fonction,
+          stagiaires: stagiaires,
+          sujetStages: sujetStages,
         });
+        encadreurDetails
+          .save()
+          .then(() => {
+            res.status(201).json({
+              status: 201,
+              message: "encadreur created with success",
+            });
+          })
+          .catch((error) => {
+            res.status(400).json({ status: 400, message: error.message });
+          });
       }
     })
 
@@ -83,6 +76,29 @@ function findencadreurByNom(req, res, next) {
       res.status(500).json({ status: 500, message: error.message });
     });
 }
+
+function findencadreurByUserId(req, res, next) {
+  encadreur = Encadreur.findOne({
+    userId: req.params.userId,
+  })
+    .populate({ path: "stagiaires", populate: { path: "sujetStages" } })
+    .populate("sujetStages")
+    .then((encadreur) => {
+      if (encadreur) {
+        {
+          res.status(201).json({ status: 201, Data: encadreur });
+        }
+      } else {
+        {
+          res.status(404).json({ status: 404, message: "not find" });
+        }
+      }
+    })
+    .catch((error) => {
+      res.status(500).json({ status: 500, message: error.message });
+    });
+}
+
 async function deleteencadreur(req, res, next) {
   try {
     if (req.params.encadreurId) {
@@ -160,3 +176,4 @@ exports.findencadreur = findencadreur;
 exports.updateencadreur = updateencadreur;
 exports.getAllencadreur = getAllencadreur;
 exports.findencadreurByNom = findencadreurByNom;
+exports.findencadreurByUserId = findencadreurByUserId;

@@ -3,7 +3,7 @@ const encadreurSchema = mongoose.Schema({
   userId: {
     type: mongoose.Types.ObjectId,
     required: true,
-    ref: "user",
+    ref: "user1",
   },
   nom_encadreur: {
     type: String,
