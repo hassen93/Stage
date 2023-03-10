@@ -3,11 +3,12 @@ const router = express.Router();
 const auth = require("../middleware/auth");
 const hasRole = require("../middleware/hasRole");
 const technologieController = require("../controller/technologieController");
-
+const upload = require("../middleware/upload");
 router.post(
   "/addtechnologie",
-  auth,
-  hasRole("admin"),
+  upload.single("image"),
+  //auth,
+  //hasRole("admin"),
   technologieController.addtechnologie
 );
 router.get(

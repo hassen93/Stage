@@ -14,6 +14,9 @@ async function addtechnologie(req, res, next) {
           nom_technologie: req.body.nom_technologie,
           sujetStages: sujetStages,
         });
+        if (req.file) {
+          technologieDetails.image = req.file.path;
+        }
         technologieDetails
           .save()
           .then(() => {

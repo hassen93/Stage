@@ -1,5 +1,8 @@
 const mongoose = require("mongoose");
 const technologieSchema = mongoose.Schema({
+  image: {
+    type: String,
+  },
   nom_technologie: {
     type: String,
     required: true,
