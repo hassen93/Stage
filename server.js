@@ -14,6 +14,7 @@ const universitéRoutes = require("./src/routes/universitéRoutes");
 const encadreurRoutes = require("./src/routes/encadreurRoutes");
 const { normalizePort } = require("./src/common/common");
 const res = require("express/lib/response");
+app.use("/uploads", express.static("uploads"));
 var port = normalizePort(process.env.PORT || "2000");
 
 app.use(express.json());
