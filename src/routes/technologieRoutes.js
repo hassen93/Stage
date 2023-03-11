@@ -6,7 +6,7 @@ const technologieController = require("../controller/technologieController");
 const upload = require("../middleware/upload");
 router.post(
   "/addtechnologie",
-  upload.single("image"),
+  upload.array("image[]"),
   //auth,
   //hasRole("admin"),
   technologieController.addtechnologie
