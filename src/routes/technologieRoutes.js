@@ -25,8 +25,9 @@ router.get(
 );
 router.post(
   "/updatetechnologie/:technologieId?",
-  auth,
-  hasRole("admin"),
+  upload.array("image[]"),
+  // auth,
+  //hasRole("admin"),
   technologieController.updatetechnologie
 );
 router.get(

@@ -1,5 +1,13 @@
 const mongoose = require("mongoose");
 const stagiaireSchema = mongoose.Schema({
+  userId: {
+    type: mongoose.Types.ObjectId,
+    required: true,
+    ref: "user1",
+  },
+  image: {
+    type: String,
+  },
   nom_stagiaire: {
     type: String,
     required: true,
@@ -46,10 +54,10 @@ const stagiaireSchema = mongoose.Schema({
     type: String,
     required: true,
   },
-  universités: [
+  universites: [
     {
       type: mongoose.Types.ObjectId,
-      ref: "université",
+      ref: "universite",
     },
   ],
   sujetStages: [

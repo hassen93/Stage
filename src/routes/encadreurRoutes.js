@@ -3,12 +3,17 @@ const router = express.Router();
 const encadreurController = require("../controller/encadreurController");
 const auth = require("../middleware/auth");
 const hasRole = require("../middleware/hasRole");
-
-router.post("/addencadreur/:userId?", encadreurController.addencadreur);
+const upload = require("../middleware/upload");
+router.post(
+  "/addencadreur",
+  upload.array("image[]"),
+  encadreurController.addencadreur
+);
 
 router.post(
   "/updateencadreur/:encadreurId?",
-  // auth,
+  upload.array("image[]"),
+  auth,
   // hasRole("admin"),
   encadreurController.updateencadreur
 );

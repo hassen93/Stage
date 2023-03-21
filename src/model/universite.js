@@ -1,19 +1,22 @@
 const mongoose = require("mongoose");
-const universitéSchema = mongoose.Schema({
-  nom_université: {
+const universiteSchema = mongoose.Schema({
+  image: {
+    type: String,
+  },
+  nom_universite: {
     type: String,
     required: true,
   },
 
-  adresse_université: {
+  adresse_universite: {
     type: String,
     required: true,
   },
-  email_université: {
+  email_universite: {
     type: String,
     required: true,
   },
-  tel_université: {
+  tel_universite: {
     type: Number,
     required: true,
   },
@@ -24,4 +27,4 @@ const universitéSchema = mongoose.Schema({
     },
   ],
 });
-module.exports.Université = mongoose.model("université", universitéSchema);
+module.exports.Universite = mongoose.model("universite", universiteSchema);

@@ -15,10 +15,21 @@ function signUp(req, res) {
               first_name: req.body.first_name,
               last_name: req.body.last_name,
               email: req.body.email,
+              adresse: req.body.adresse,
+              telephone: req.body.telephone,
               verification_code: RandomNumber,
               password: hash,
               role: req.body.role,
             });
+            if (req.files) {
+              let path = "";
+              req.files.forEach(function (files, index, arr) {
+                path = path + files.path + ",";
+              });
+              path = path.substring(0, path.lastIndexOf(","));
+
+              userDetails.image = path;
+            }
             userDetails
               .save()
               .then(() => {
@@ -41,7 +52,6 @@ function signUp(req, res) {
 }
 
 function findUser(req, res, next) {
-  // console.log("7777777777777777777")
   user = User.findById(req.params.userId)
     .then((user) => {
       if (user) {
@@ -101,7 +111,6 @@ function login(req, res) {
 }
 async function deleteUser(req, res, next) {
   try {
-    console.log("4444444");
     if (req.params.userId) {
       const user = await User.findOneAndDelete({ _id: req.params.userId });
       if (user) {
@@ -117,11 +126,25 @@ async function deleteUser(req, res, next) {
   }
 }
 
-const updateuser = async (req, res) => {
+const updateuser = async (req, res, next) => {
+  console.log(req.params.userId);
+  if (req.files) {
+    let path = "";
+    req.files.forEach(function (files, index, arr) {
+      path = path + files.path + ",";
+    });
+    path = path.substring(0, path.lastIndexOf(","));
+
+    images = path;
+  }
   const firstName = req.body.first_name;
   const lastName = req.body.last_name;
   const password = req.body.password;
   const email = req.body.email;
+  const adresse = req.body.adresse;
+  const telephone = req.body.telephone;
+  const role = req.body.role;
+
   try {
     const user = await User.findOne({ _id: req.params.userId });
     if (!user)
@@ -132,7 +155,11 @@ const updateuser = async (req, res) => {
         first_name: firstName,
         last_name: lastName,
         email: email,
+        adresse: adresse,
+        telephone: telephone,
+        role: role,
         password: hash,
+        image: images,
       };
       const newUpdatedUser = await User.findByIdAndUpdate(
         req.params.userId,
@@ -155,16 +182,6 @@ const getAlluser = async (req, res, next) => {
       res.status(500).json({ status: 500, message: err.message });
     });
 };
-function logout(req, res) {
-  const authHeader = req.headers["authorization"];
-  jwt.sign(authHeader, "", { expiresIn: 1 }, (logout, err) => {
-    if (logout) {
-      res.send({ msg: "You have been Logged Out" });
-    } else {
-      res.send({ msg: "Error" });
-    }
-  });
-}
 function findUserByEmail(req, res, next) {
   user = User.findOne({
     email: req.params.email,
@@ -190,5 +207,4 @@ exports.login = login;
 exports.deleteUser = deleteUser;
 exports.updateuser = updateuser;
 exports.getAlluser = getAlluser;
-exports.logout = logout;
 exports.findUserByEmail = findUserByEmail;

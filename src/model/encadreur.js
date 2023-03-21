@@ -5,6 +5,9 @@ const encadreurSchema = mongoose.Schema({
     required: true,
     ref: "user1",
   },
+  image: {
+    type: String,
+  },
   nom_encadreur: {
     type: String,
     required: true,

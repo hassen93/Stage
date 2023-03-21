@@ -1,42 +1,44 @@
 const express = require("express");
 const router = express.Router();
-const universitéController = require("../controller/universitéController");
+const universiteController = require("../controller/universiteController");
 const auth = require("../middleware/auth");
 const hasRole = require("../middleware/hasRole");
+const upload = require("../middleware/upload");
 
 router.post(
   "/adduniversite",
+  upload.array("image[]"),
   //auth,
   //hasRole("admin"),
-  universitéController.adduniversité
+  universiteController.adduniversite
 );
 router.post(
   "/updateuniversite/:universiteId?",
-  universitéController.updateduniversité
+  universiteController.updateduniversite
 );
 router.get(
   "/deleteuniversite/:universiteId?",
   // auth,
   //hasRole("admin"),
-  universitéController.deleteuniversité
+  universiteController.deleteuniversite
 );
 
 router.get(
-  "/finduniversite/:universiteId?",
+  "/finduniversiteById/:universiteId?",
   //auth,
   //hasRole("admin"),
-  universitéController.finduniversité
+  universiteController.finduniversite
 );
 router.get(
   "/getAlluniversite",
   //auth,
   //hasRole("admin"),
-  universitéController.getAlluniversité
+  universiteController.getAlluniversite
 );
 router.get(
   "/finduniversiteByNom/:nom_universite?",
   //auth,
   //hasRole("admin"),
-  universitéController.finduniversiteByNom
+  universiteController.finduniversiteByNom
 );
 module.exports = router;

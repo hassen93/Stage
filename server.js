@@ -10,7 +10,7 @@ const userRoutes = require("./src/routes/userRoutes");
 const stagiaireRoutes = require("./src/routes/stagiaireRoutes");
 const sujetStageRoutes = require("./src/routes/sujetStageRoutes");
 const technologieRoutes = require("./src/routes/technologieRoutes");
-const universitéRoutes = require("./src/routes/universitéRoutes");
+const universiteRoutes = require("./src/routes/universiteRoutes");
 const encadreurRoutes = require("./src/routes/encadreurRoutes");
 const { normalizePort } = require("./src/common/common");
 const res = require("express/lib/response");
@@ -37,6 +37,6 @@ app.use("/", userRoutes);
 app.use("/stagiaire", stagiaireRoutes);
 app.use("/sujetStage", sujetStageRoutes);
 app.use("/technologie", technologieRoutes);
-app.use("/universite", universitéRoutes);
+app.use("/universite", universiteRoutes);
 
 app.use("/encadreur", encadreurRoutes);

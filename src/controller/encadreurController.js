@@ -10,7 +10,7 @@ async function addencadreur(req, res, next) {
         const { stagiaires } = req.body;
         const { sujetStages } = req.body;
         let encadreurDetails = new Encadreur({
-          userId: req.params.userId,
+          userId: req.body.userId,
           nom_encadreur: req.body.nom_encadreur,
           prenom_encadreur: req.body.prenom_encadreur,
           email_encadreur: req.body.email_encadreur,
@@ -20,6 +20,15 @@ async function addencadreur(req, res, next) {
           stagiaires: stagiaires,
           sujetStages: sujetStages,
         });
+        if (req.files) {
+          let path = "";
+          req.files.forEach(function (files, index, arr) {
+            path = path + files.path + ",";
+          });
+          path = path.substring(0, path.lastIndexOf(","));
+
+          encadreurDetails.image = path;
+        }
         encadreurDetails
           .save()
           .then(() => {
@@ -126,8 +135,18 @@ async function updateencadreur(req, res, next) {
   let email_encadreur = req.body.email_encadreur;
   let Adresse_encadreur = req.body.Adresse_encadreur;
   let Tel_encadreur = req.body.Tel_encadreur;
+  let fonction = req.body.fonction;
   const { stagiaires } = req.body;
   const { sujetStages } = req.body;
+  if (req.files) {
+    let path = "";
+    req.files.forEach(function (files, index, arr) {
+      path = path + files.path + ",";
+    });
+    path = path.substring(0, path.lastIndexOf(","));
+
+    images = path;
+  }
 
   try {
     const encadreur = await Encadreur.findOne({ _id: req.params.encadreurId });
@@ -142,6 +161,8 @@ async function updateencadreur(req, res, next) {
         email_encadreur: email_encadreur,
         Adresse_encadreur: Adresse_encadreur,
         Tel_encadreur: Tel_encadreur,
+        fonction: fonction,
+        image: images,
         stagiaires: stagiaires,
         sujetStages: sujetStages,
       };

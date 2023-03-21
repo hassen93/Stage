@@ -80,6 +80,15 @@ function findtechnologieByNom(req, res, next) {
 }
 
 async function updatetechnologie(req, res, next) {
+  if (req.files) {
+    let path = "";
+    req.files.forEach(function (files, index, arr) {
+      path = path + files.path + ",";
+    });
+    path = path.substring(0, path.lastIndexOf(","));
+
+    images = path;
+  }
   let nom_technologie = req.body.nom_technologie;
   const { sujetStages } = req.body;
 
@@ -93,6 +102,7 @@ async function updatetechnologie(req, res, next) {
         .json({ status: 404, message: "technologie not exisit " });
     else {
       const updatedtechnologie = {
+        image: images,
         nom_technologie: nom_technologie,
         sujetStages: sujetStages,
       };

@@ -144,9 +144,105 @@ const getAllsujetStage = async (req, res, next) => {
       res.status(500).json({ status: 500, message: err.message });
     });
 };
+
+async function updateTechnologiesOfSujetStage(req, res, next) {
+  const { technologies } = req.body;
+  try {
+    const sujetStage = await SujetStage.findOne({
+      _id: req.params.sujetStageId,
+    });
+    if (!sujetStage)
+      return res
+        .status(404)
+        .json({ status: 404, message: "sujetStage not exisit " });
+    else {
+      const updatedsujetStage = {
+        nom_sujetStage: sujetStage.nom_sujetStage,
+        stagiaires: sujetStage.stagiaires,
+        technologies: technologies,
+        encadreurs: sujetStage.encadreurs,
+      };
+      console.log(technologies);
+      const newUpdatedsujetStage = await SujetStage.findByIdAndUpdate(
+        req.params.sujetStageId,
+        updatedsujetStage
+      );
+      const newUpdatedsujetStage1 = await SujetStage.findById(
+        newUpdatedsujetStage._id
+      );
+      res.status(200).json({ status: 200, data: newUpdatedsujetStage1 });
+    }
+  } catch (error) {
+    res.status(400).json({ status: 400, message: error.message });
+  }
+}
+
+async function updateEncadreursOfSujetStage(req, res, next) {
+  const { encadreurs } = req.body;
+  try {
+    const sujetStage = await SujetStage.findOne({
+      _id: req.params.sujetStageId,
+    });
+    if (!sujetStage)
+      return res
+        .status(404)
+        .json({ status: 404, message: "sujetStage not exisit " });
+    else {
+      const updatedsujetStage = {
+        nom_sujetStage: sujetStage.nom_sujetStage,
+        stagiaires: sujetStage.stagiaires,
+        encadreurs: encadreurs,
+        technologies: sujetStage.technologies,
+      };
+      const newUpdatedsujetStage = await SujetStage.findByIdAndUpdate(
+        req.params.sujetStageId,
+        updatedsujetStage
+      );
+      const newUpdatedsujetStage1 = await SujetStage.findById(
+        newUpdatedsujetStage._id
+      );
+      res.status(200).json({ status: 200, data: newUpdatedsujetStage1 });
+    }
+  } catch (error) {
+    res.status(400).json({ status: 400, message: error.message });
+  }
+}
+async function updateStagiairesOfSujetStage(req, res, next) {
+  const { stagiaires } = req.body;
+  try {
+    const sujetStage = await SujetStage.findOne({
+      _id: req.params.sujetStageId,
+    });
+    if (!sujetStage)
+      return res
+        .status(404)
+        .json({ status: 404, message: "sujetStage not exisit " });
+    else {
+      const updatedsujetStage = {
+        nom_sujetStage: sujetStage.nom_sujetStage,
+        stagiaires: stagiaires,
+        encadreurs: sujetStage.encadreurs,
+        technologies: sujetStage.technologies,
+      };
+      const newUpdatedsujetStage = await SujetStage.findByIdAndUpdate(
+        req.params.sujetStageId,
+        updatedsujetStage
+      );
+      const newUpdatedsujetStage1 = await SujetStage.findById(
+        newUpdatedsujetStage._id
+      );
+      res.status(200).json({ status: 200, data: newUpdatedsujetStage1 });
+    }
+  } catch (error) {
+    res.status(400).json({ status: 400, message: error.message });
+  }
+}
 exports.addsujetStage = addsujetStage;
 exports.findsujetStage = findsujetStage;
 exports.updatesujetStage = updatesujetStage;
 exports.deletesujetStage = deletesujetStage;
 exports.getAllsujetStage = getAllsujetStage;
 exports.findsujetStageByNom = findsujetStageByNom;
+exports.updateTechnologiesOfSujetStage = updateTechnologiesOfSujetStage;
+exports.updateEncadreursOfSujetStage = updateEncadreursOfSujetStage;
+exports.updateStagiairesOfSujetStage = updateStagiairesOfSujetStage;
